@@ -8,7 +8,7 @@ const LABEL_YOU_ARE_HERE = 'You are here!';
 const ICON_STANDARD_USER = 'standard:user';
 
 export default class BoatsNearMe extends LightningElement {
-    // Create the component boatsNearMe and show boats that are near the user, 
+    // Creates the component boatsNearMe and show boats that are near the user, 
     // using the browser location and boat type. Display them on a map, 
     // always with the consent of the user (and only while the page is open).
     
@@ -22,7 +22,7 @@ export default class BoatsNearMe extends LightningElement {
     latitude;
     longitude;
 
-    // Add the wired method from the Apex Class
+    // Adds the wired method from the Apex Class
     // Name it getBoatsByLocation, and use latitude, longitude and boatTypeId
     // Handle the result and calls createMapMarkers
     @wire(getBoatsByLocation, { latitude: '$latitude', longitude: '$longitude', boatTypeId: '$boatTypeId'})
