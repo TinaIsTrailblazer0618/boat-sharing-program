@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
+import { reduceErrors } from 'c/ldsUtils';
 
 const ERROR_VARIANT = 'error';
 const ERROR_TITLE = 'Error loading Boats Near Me';
@@ -13,6 +14,7 @@ export default class BoatsNearMe extends LightningElement {
     // always with the consent of the user (and only while the page is open).
     
     @api boatTypeId;
+    
     // Private
     mapMarkers = [];
     isLoading = true;
