@@ -1,11 +1,11 @@
 <template>
     <lightning-tabset variant="scoped">
-        <template if:true={listIsNotEmpty}>
-            <lightning-tab label="Gallery">
+        <lightning-tab label="Gallery">
+            <template if:true={listIsNotEmpty}>
                 <div class="slds-scrollable_y">
                     <!-- layout horizontally aligned to the center  -->
                     <!-- layout allowing multiple rows -->
-                    <lightning-layout class="slds-grid_align-center multiple-rows">
+                    <lightning-layout horizontal-align="center" multiple-rows>
                         <!-- template looping through each boat -->
                         <template for:each={boats} for:item="boat">
                             <!-- lightning-layout-item for each boat -->
@@ -27,17 +27,18 @@
                         </template>
                     </lightning-layout>
                 </div>
-            </lightning-tab>
-        </template>
+            </template>
+        </lightning-tab>
         <lightning-tab label="Boat Editor">
             <!-- Scrollable div and lightning datatable go here -->
             <div class="slds-scrollable_y">
                 <lightning-datatable
-                    key-field="id"
+                    key-field="Id"
                     data={boats}
                     columns={columns}
                     hide-checkbox-column="true"
                     show-row-number-column
+                    draft-values={draftValues}
                     onsave={handleSave}
                 ></lightning-datatable>
             </div>

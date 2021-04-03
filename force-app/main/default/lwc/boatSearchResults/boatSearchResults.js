@@ -10,6 +10,7 @@ import PRICE_FIELD from '@salesforce/schema/Boat__c.Price__c';
 import DESCRIPTION_FIELD from '@salesforce/schema/Boat__c.Description__c';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 import updateBoatList from '@salesforce/apex/BoatDataService.updateBoatList';
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 
 const SUCCESS_TITLE = 'Success';
 const MESSAGE_SHIP_IT = 'Ship it!';
@@ -30,6 +31,7 @@ export default class BoatSearchResults extends LightningElement {
     error = undefined;
     isLoading = false;
     columns = COLUMNS;
+    draftValues = [];
 
     // Wired Apex result so it can be refreshed programmatically
     wiredBoatsResult;
@@ -41,7 +43,7 @@ export default class BoatSearchResults extends LightningElement {
     messageContext;
 
     // wired getBoats method
-    @wire(getBoats, { boatTypeId : $boatTypeId })
+    @wire(getBoats, { boatTypeId : '$boatTypeId' })
     wiredBoats(result) {
         this.wiredBoatsResult = result;
         if (result.data) {
@@ -77,6 +79,7 @@ export default class BoatSearchResults extends LightningElement {
     }
 
     // this function must update selectedBoatId and call sendMessageService
+    // this is an event from boatTile component where boatId was sent
     updateSelectedTile(event) {
         this.selectedBoatId = event.detail.boatId;
         this.sendMessageService(this.selectedBoatId);
@@ -94,17 +97,21 @@ export default class BoatSearchResults extends LightningElement {
     // passing the updated fields from draftValues to the 
     // Apex method updateBoatList(Object data).
     // Show a toast message with the title
-    // clear lightning-datatable draft values
+    // Clear lightning-datatable draft values
     handleSave(event) {
         // notify loading
         this.notifyLoading(true);
 
         const updatedFields = event.detail.draftValues;
 
+        // Prepare the record IDs for getRecordNotifyChange()
+        const notifyChangeIds = updatedFields.map(row => { return { "recordId" : row.Id } });
+
         // Update the records via Apex
+        // Pass edited fields to the updateContacts Apex controller
         updateBoatList({ data: updatedFields })
-            .then(() => {
-                this.error = undefined;
+            .then((result) => {
+                console.log(JSON.stringify("Apex update result: "+ result));
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: SUCCESS_TITLE,
@@ -112,7 +119,14 @@ export default class BoatSearchResults extends LightningElement {
                         variant: SUCCESS_VARIANT
                     })
                 );
-                return this.refresh();
+                // Refresh LDS cache and wires
+                getRecordNotifyChange(notifyChangeIds);
+
+                // Display fresh data in the datatable
+                return this.refresh().then(() => {
+                    // Clear all draft values in the datatable
+                    this.draftValues = [];
+                })
             })
             .catch((error) => {
                 this.dispatchEvent(
@@ -124,7 +138,7 @@ export default class BoatSearchResults extends LightningElement {
                 );
             })
             .finally(() => {
-                this.template.querySelector('lightning-datatable').draftValues = []; // Is it correct?
+                this.notifyLoading(false);
             });
     }
 
