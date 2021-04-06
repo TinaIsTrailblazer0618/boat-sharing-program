@@ -5,19 +5,13 @@ import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 // Custom Labels Imports
-// import labelDetails for Details
-// import labelReviews for Reviews
-// import labelAddReview for Add_Review
-// import labelFullDetails for Full_Details
-// import labelPleaseSelectABoat for Please_select_a_boat
 import labelDetails from '@salesforce/label/c.Details';
 import labelReviews from '@salesforce/label/c.Reviews';
 import labelAddReview from '@salesforce/label/c.Add_Review';
 import labelFullDetails from '@salesforce/label/c.Full_Details';
 import labelPleaseSelectABoat from '@salesforce/label/c.Please_select_a_boat';
 // Boat__c Schema Imports
-// import BOAT_ID_FIELD for the Boat Id
-// import BOAT_NAME_FIELD for the boat Name
+import BOAT_OBJECT from '@salesforce/schema/Boat__c';
 import BOAT_ID_FIELD from '@salesforce/schema/Boat__c.Id';
 import BOAT_NAME_FIELD from '@salesforce/schema/Boat__c.Name';
 import BOAT_TYPE_FIELD from '@salesforce/schema/Boat__c.BoatType__c';
@@ -30,6 +24,7 @@ const BOAT_FIELDS = [BOAT_ID_FIELD, BOAT_NAME_FIELD];
 export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
     boatId;
     wiredRecord;
+    boatObj = BOAT_OBJECT;
     boatType = BOAT_TYPE_FIELD;
     boatLength = BOAT_LENGTH_FIELD;
     boatPrice = BOAT_PRICE_FIELD;
@@ -91,6 +86,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
             type: 'standard__recordPage',
             attributes: {
                 recordId: this.boatId,
+                objectApiName: this.boatObj,
                 actionName: 'view' 
             }
         });
@@ -98,6 +94,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
 
     // Navigates back to the review list, and refreshes reviews component
     handleReviewCreated() { 
-        this.template.querySelector('lightning-tab').activeTabValue = 'reviews';
+        this.template.querySelector('lightning-tabset').activeTabValue = 'reviews';
+        this.template.querySelector('c-boat-reviews').refresh();
     }
 }
