@@ -1,3 +1,22 @@
+# The Architecture of Boat Sharing Application:
+* boatSearch
+    * boatSearchForm
+    * boatSearchResults
+        * boatTile
+        * boatsNearMe
+* boatDetailTabs
+    * boatReviews
+        * fiveStarRating
+    * boatAddReviewForm
+        * fiveStarRating
+* boatMap
+
+# Components Used on the Boat Record Page
+* boatMap
+* similarBoats
+
+- - - -
+
 # Salesforce DX Project: Next Steps
 
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
