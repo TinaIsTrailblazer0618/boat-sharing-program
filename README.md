@@ -1,4 +1,4 @@
-# The Architecture of Boat Sharing Application:
+# The Architecture of Boat Sharing Application
 * boatSearch
     * boatSearchForm
     * boatSearchResults
@@ -14,6 +14,13 @@
 # Components Used on the Boat Record Page
 * boatMap
 * similarBoats
+
+
+
+
+
+
+
 
 - - - -
 
