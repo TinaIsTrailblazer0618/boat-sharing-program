@@ -103,6 +103,7 @@ export default class BoatSearchResults extends LightningElement {
         this.notifyLoading(true);
 
         const updatedFields = event.detail.draftValues;
+        console.log(updatedFields);
 
         // Prepare the record IDs for getRecordNotifyChange()
         const notifyChangeIds = updatedFields.map(row => { return { "recordId" : row.Id } });

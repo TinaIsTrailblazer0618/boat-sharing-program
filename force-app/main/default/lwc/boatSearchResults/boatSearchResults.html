@@ -2,7 +2,7 @@
     <lightning-tabset variant="scoped">
         <lightning-tab label="Gallery">
             <template if:true={listIsNotEmpty}>
-                <div class="slds-scrollable_y">
+                <div class="gallery-style slds-scrollable_y">
                     <!-- layout horizontally aligned to the center  -->
                     <!-- layout allowing multiple rows -->
                     <lightning-layout horizontal-align="center" multiple-rows>
@@ -31,7 +31,7 @@
         </lightning-tab>
         <lightning-tab label="Boat Editor">
             <!-- Scrollable div and lightning datatable go here -->
-            <div class="slds-scrollable_y">
+            <div class="datatable-style slds-scrollable_y">
                 <lightning-datatable
                     key-field="Id"
                     data={boats}
